@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Card, Space } from "antd";
 import axios from "axios";
 
@@ -18,19 +19,22 @@ export const New = ({ id }) => {
           setIsLoading(false);
         });
     }
-  }, []);
+  }, [id]);
 
   return (
     <Space direction="vertical" size={16}>
       {itemInfo ? (
         <Card
-          title={itemInfo.title}
+          title={<Link to={`/item/${id}`}>{itemInfo.title}</Link>}
           loading={isLoading}
-          extra={<a href={itemInfo.url}>Link</a>}
+          extra={
+            <Link to={itemInfo.url} target="_blank" rel="noopener noreferrer">
+              Link
+            </Link>
+          }
           size="small"
           style={{ width: 950 }}
         >
-          Time:
           {isLoading
             ? "Long time ago"
             : ` ${new Date(itemInfo.time * 1000).getDate()}` +

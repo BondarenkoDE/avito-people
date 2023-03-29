@@ -1,19 +1,15 @@
-import "./App.css";
-import styles from "./pages/MainPage/Main.module.scss";
-import { MainPage } from "./pages/MainPage/MainPage";
+import { Routes, Route } from "react-router-dom";
 
-import { Layout } from "antd";
+import "./App.css";
+import { MainPage } from "./pages/MainPage/MainPage";
+import { ItemPage } from "./pages/ItemPage";
 
 function App() {
-  const { Header, Footer, Content } = Layout;
   return (
-    <Layout className={styles.root}>
-      <Header className={styles.headerStyle}>Avito People</Header>
-      <Content className={styles.contentStyle}>
-        <MainPage />
-      </Content>
-      <Footer className={styles.footerStyle}>Footer</Footer>
-    </Layout>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/item/:id" element={<ItemPage />} />
+    </Routes>
   );
 }
 

@@ -1,30 +1,47 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import { Layout, Pagination } from "antd";
 
-// import styles from "./Main.module.scss";
-import { New } from "../../components/new";
+import styles from "./Main.module.scss";
+import { New } from "../../components/New/New";
 
 export const MainPage = () => {
-  const [isLoading, setIsLoading] = React.useState(true);
+  const { Header, Footer, Content } = Layout;
   const [news, setNews] = React.useState([]);
+  const [current, setCurrent] = React.useState(1);
+
+  const onChange = (page) => {
+    setCurrent(page);
+    console.log(page);
+  };
 
   useEffect(() => {
     axios
       .get("https://hacker-news.firebaseio.com/v0/newstories.json")
       .then((res) => {
         setNews(res.data.filter((_, i) => i < 100 && true));
-        setIsLoading(false);
       });
   }, []);
 
   return (
     <>
-      {news.map((id, i) => (
-        <New id={id} key={i} />
-      ))}
-      {/* {isLoading
-        ? [...new Array(10)].map((_, i) => <New id={0} key={i} />)
-        : news.map((id, i) => <New id={id} key={i} />)} */}
+      <Layout className={styles.root}>
+        <Header className={styles.headerStyle}>Avito People</Header>
+        <Content className={styles.contentStyle}>
+          {news.map((id, i) => (
+            <New id={id} key={i} />
+          ))}
+        </Content>
+        <Footer className={styles.footerStyle}>
+          <Pagination
+            defaultCurrent={1}
+            defaultPageSize={100}
+            current={current}
+            onChange={onChange}
+            total={500}
+          />
+        </Footer>
+      </Layout>
     </>
   );
 };
