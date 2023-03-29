@@ -9,7 +9,7 @@ export const MainPage = () => {
   const { Header, Footer, Content } = Layout;
   const [news, setNews] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(100);
+  const [pageSize, setPageSize] = React.useState(10);
 
   const onChange = (page, size) => {
     setCurrentPage(page);
@@ -20,6 +20,7 @@ export const MainPage = () => {
     axios
       .get("https://hacker-news.firebaseio.com/v0/newstories.json")
       .then((res) => {
+        console.log(res.data);
         setNews(
           res.data.filter(
             (_, i) =>
@@ -34,8 +35,8 @@ export const MainPage = () => {
       <Layout className={styles.root}>
         <Header className={styles.headerStyle}>Avito People</Header>
         <Content className={styles.contentStyle}>
-          {news.map((id, i) => (
-            <New id={id} key={i} />
+          {news.map((id) => (
+            <New id={id} key={id} />
           ))}
         </Content>
         <Footer className={styles.footerStyle}>
@@ -44,7 +45,7 @@ export const MainPage = () => {
             defaultPageSize={pageSize}
             current={currentPage}
             onChange={onChange}
-            total={500}
+            total={250}
           />
         </Footer>
       </Layout>
