@@ -8,20 +8,26 @@ import { New } from "../../components/New/New";
 export const MainPage = () => {
   const { Header, Footer, Content } = Layout;
   const [news, setNews] = React.useState([]);
-  const [current, setCurrent] = React.useState(1);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(100);
 
-  const onChange = (page) => {
-    setCurrent(page);
-    console.log(page);
+  const onChange = (page, size) => {
+    setCurrentPage(page);
+    setPageSize(size);
   };
 
   useEffect(() => {
     axios
       .get("https://hacker-news.firebaseio.com/v0/newstories.json")
       .then((res) => {
-        setNews(res.data.filter((_, i) => i < 100 && true));
+        setNews(
+          res.data.filter(
+            (_, i) =>
+              i >= (currentPage - 1) * pageSize && i < currentPage * pageSize
+          )
+        );
       });
-  }, []);
+  }, [currentPage, pageSize]);
 
   return (
     <>
@@ -35,8 +41,8 @@ export const MainPage = () => {
         <Footer className={styles.footerStyle}>
           <Pagination
             defaultCurrent={1}
-            defaultPageSize={100}
-            current={current}
+            defaultPageSize={pageSize}
+            current={currentPage}
             onChange={onChange}
             total={500}
           />
