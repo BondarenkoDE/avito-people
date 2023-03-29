@@ -20,7 +20,6 @@ export const MainPage = () => {
     axios
       .get("https://hacker-news.firebaseio.com/v0/newstories.json")
       .then((res) => {
-        console.log(res.data);
         setNews(
           res.data.filter(
             (_, i) =>
