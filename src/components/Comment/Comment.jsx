@@ -33,7 +33,7 @@ function timeSince(date) {
 export const Comment = ({ id }) => {
   const { token } = theme.useToken();
   const { Panel } = Collapse;
-  let commentInfo;
+  const [commentInfo, setCommentInfo] = React.useState({});
   const panelStyle = {
     marginBottom: 24,
     background: token.colorFillAlter,
@@ -45,7 +45,7 @@ export const Comment = ({ id }) => {
     axios
       .get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
       .then((res) => {
-        commentInfo = res.data;
+        setCommentInfo(res.data);
       });
   }, []);
 
@@ -56,7 +56,7 @@ export const Comment = ({ id }) => {
         background: token.colorBgContainer,
       }}
     >
-      {!commentInfo.hasOwnProperty("deleted") && (
+      {commentInfo && !commentInfo.hasOwnProperty("deleted") && (
         <Panel
           header={
             <>

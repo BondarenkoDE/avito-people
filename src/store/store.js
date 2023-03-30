@@ -4,6 +4,7 @@ const store = observable({
   currentPage: 1,
   pageSize: 10,
   news: [],
+  refresh: 0,
   sortType: {
     label: "New Stories",
     key: "newstories",
@@ -16,6 +17,9 @@ const store = observable({
   },
   setNews(value) {
     this.news = value;
+  },
+  setRefresh(value) {
+    this.refresh = value;
   },
   setSortType(value) {
     this.sortType = value;

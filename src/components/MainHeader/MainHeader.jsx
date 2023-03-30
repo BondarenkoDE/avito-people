@@ -34,11 +34,15 @@ const MainHeader = () => {
     onClick: handleMenuClick,
   };
 
+  const refreshButton = () => {
+    store.setRefresh(new Date());
+  };
+
   return (
     <Header className={styles.headerStyle}>
       <Row justify="space-around">
         <Col span={4}>
-          <Button>Refresh</Button>
+          <Button onClick={() => refreshButton()}> Refresh</Button>
         </Col>
         <Col span={4}>Avito People</Col>
         <Col span={4}>

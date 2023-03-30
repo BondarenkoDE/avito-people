@@ -10,6 +10,7 @@ import MainHeader from "../../components/MainHeader/MainHeader";
 
 const MainPage = () => {
   const { Footer, Content } = Layout;
+  // setInterval(() => store.setRefresh(new Date()), 60 * 1000); // useState // в переменную + useRef
 
   const onChange = (page, size) => {
     store.setPageSize(size);
@@ -18,6 +19,7 @@ const MainPage = () => {
 
   useEffect(() => {
     const order = store.sortType.key;
+    console.log(new Date());
     axios
       .get(`https://hacker-news.firebaseio.com/v0/${order}.json`)
       .then((res) => {
@@ -29,7 +31,7 @@ const MainPage = () => {
           )
         );
       });
-  }, [store.currentPage, store.pageSize, store.sortType]);
+  }, [store.currentPage, store.pageSize, store.sortType, store.refresh]);
 
   return (
     <>
