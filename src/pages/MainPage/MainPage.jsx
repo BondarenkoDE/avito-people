@@ -1,48 +1,50 @@
 import React, { useEffect } from "react";
+import { observer } from "mobx-react";
+import store from "../../store/store";
 import axios from "axios";
 import { Layout, Pagination } from "antd";
 
 import styles from "./Main.module.scss";
 import { New } from "../../components/New/New";
+import MainHeader from "../../components/MainHeader/MainHeader";
 
-export const MainPage = () => {
-  const { Header, Footer, Content } = Layout;
-  const [news, setNews] = React.useState([]);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(10);
+const MainPage = () => {
+  const { Footer, Content } = Layout;
 
   const onChange = (page, size) => {
-    setCurrentPage(page);
-    setPageSize(size);
+    store.setPageSize(size);
+    store.setCurrentPage(page);
   };
 
   useEffect(() => {
+    const order = store.sortType.key;
     axios
-      .get("https://hacker-news.firebaseio.com/v0/newstories.json")
+      .get(`https://hacker-news.firebaseio.com/v0/${order}.json`)
       .then((res) => {
-        setNews(
+        store.setNews(
           res.data.filter(
             (_, i) =>
-              i >= (currentPage - 1) * pageSize && i < currentPage * pageSize
+              i >= (store.currentPage - 1) * store.pageSize &&
+              i < store.currentPage * store.pageSize
           )
         );
       });
-  }, [currentPage, pageSize]);
+  }, [store.currentPage, store.pageSize, store.sortType]);
 
   return (
     <>
       <Layout className={styles.root}>
-        <Header className={styles.headerStyle}>Avito People</Header>
+        <MainHeader />
         <Content className={styles.contentStyle}>
-          {news.map((id) => (
+          {store.news.map((id) => (
             <New id={id} key={id} />
           ))}
         </Content>
         <Footer className={styles.footerStyle}>
           <Pagination
             defaultCurrent={1}
-            defaultPageSize={pageSize}
-            current={currentPage}
+            defaultPageSize={store.pageSize}
+            current={store.currentPage}
             onChange={onChange}
             total={250}
           />
@@ -51,3 +53,5 @@ export const MainPage = () => {
     </>
   );
 };
+
+export default observer(MainPage);

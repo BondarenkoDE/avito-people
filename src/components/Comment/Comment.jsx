@@ -33,7 +33,7 @@ function timeSince(date) {
 export const Comment = ({ id }) => {
   const { token } = theme.useToken();
   const { Panel } = Collapse;
-  const [commentInfo, setCommentInfo] = React.useState({});
+  let commentInfo;
   const panelStyle = {
     marginBottom: 24,
     background: token.colorFillAlter,
@@ -45,7 +45,7 @@ export const Comment = ({ id }) => {
     axios
       .get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
       .then((res) => {
-        setCommentInfo(res.data);
+        commentInfo = res.data;
       });
   }, []);
 
@@ -56,12 +56,12 @@ export const Comment = ({ id }) => {
         background: token.colorBgContainer,
       }}
     >
-      {!commentInfo.deleted && (
+      {!commentInfo.hasOwnProperty("deleted") && (
         <Panel
           header={
             <>
               <Row>
-                <Col span={3}>
+                <Col span={4}>
                   <UserOutlined /> {commentInfo.by}
                 </Col>
                 <Col span={4}>
@@ -78,8 +78,8 @@ export const Comment = ({ id }) => {
           }
           key={id}
           style={panelStyle}
-          accordion={commentInfo.hasOwnProperty("kids") ? true : false}
-          showArrow={commentInfo.hasOwnProperty("kids") ? true : false}
+          accordion={commentInfo.hasOwnProperty("kids")}
+          showArrow={commentInfo.hasOwnProperty("kids")}
         >
           {commentInfo.hasOwnProperty("kids") &&
             commentInfo.kids.map((id) => <Comment id={id} key={id} />)}
